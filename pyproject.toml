@@ -18,19 +18,19 @@ dependencies = [
     "sqlalchemy>=1.4",
     "python-dotenv>=1.0.0",
     "numpy>=1.21,<3.0",
-    "psycopg2-binary",
-    "oracledb>=1.0.0",
-    "psycopg2>=2.9"
+    "psycopg2-binary>=2.9",
+    "oracledb>=1.0.0"
 ]
 
 [project.optional-dependencies]
 oracle = ["oracledb>=1.0.0"]
-postgres = ["psycopg2>=2.9"]
+postgres = ["psycopg2-binary>=2.9"]
 dev = ["black", "ruff", "pytest"]
 
 [project.urls]
-"Homepage" = "https://github.com/KelvynBFreitas/kldb"
-"Bug Tracker" = "https://github.com/KelvynBFreitas/kldb/issues"
+Homepage = "https://github.com/KelvynBFreitas/kldb"
+Bug_Tracker = "https://github.com/KelvynBFreitas/kldb/issues"
 
 [tool.setuptools]
 packages = ["kldb"]
+include-package-data = true
