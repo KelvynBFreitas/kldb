@@ -12,7 +12,7 @@ Ele oferece uma API limpa e eficiente para:
 
 ---
 
-## 💻 Instalação
+##  Instalação
 
 Você pode instalar o `kldb` via PyPI (quando publicado):
 
@@ -32,7 +32,7 @@ pip install "kldb[oracle]"
 pip install "kldb[all,dev]"
 ```
 
-## 🚀 Uso Básico
+## Uso Básico
 Conexões e Consultas Simples
 Este exemplo mostra como usar as classes específicas para cada banco (kloracle e klpostgres) para carregar dados.
 ```bash
