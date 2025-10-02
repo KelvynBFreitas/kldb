@@ -30,6 +30,7 @@ pip install "kldb[oracle]"
 
 # Para incluir todos os suportes e dependências de desenvolvimento
 pip install "kldb[all,dev]"
+```
 
 🚀 Uso Básico
 Conexões e Consultas Simples
