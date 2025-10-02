@@ -14,7 +14,7 @@ Ele oferece uma API limpa e eficiente para:
 
 ##  Instalação
 
-#Você pode instalar o `kldb` via PyPI (quando publicado):
+#Você pode instalar o `kldb` via GItHub (quando publicado):
 
 ```bash
 pip install git+https://github.com/KelvynBFreitas/kldb
