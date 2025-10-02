@@ -34,9 +34,11 @@ class DatabaseManager:
 
         self.engine: Engine = create_engine(
             f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}",
-            echo=echo
+            echo=echo,
+            future=True
         )
-        self.metadata = MetaData(bind=self.engine)
+        # ✅ instanciar sem bind (SQLAlchemy 2.0)
+        self.metadata = MetaData()
         self.conn: Optional[Connection] = None
 
     # ---------------- Context Manager ---------------- #
@@ -122,11 +124,6 @@ class DatabaseManager:
     def delete_by_keys(self, table_name: str, keys: Dict[str, List[Any]]) -> None:
         """
         Deleta registros de uma tabela com base em valores específicos de coluna(s).
-
-        Args:
-            table_name: Nome da tabela.
-            keys: Dicionário onde chave = nome da coluna, valor = lista de valores a deletar.
-                  Ex: {"email": ["a@x.com", "b@y.com"]} ou {"email": [...], "idade": [...]}.
         """
         table = Table(table_name, self.metadata, autoload_with=self.engine)
         conditions = []
@@ -158,19 +155,16 @@ class DatabaseManager:
         """
         if self.conn is None:
             with self.engine.begin() as conn:
-                result = conn.execute(query)
+                result = conn.execute(text(query) if isinstance(query, str) else query)
                 return result.fetchall() if fetch else None
         else:
-            result = self.conn.execute(query)
+            result = self.conn.execute(text(query) if isinstance(query, str) else query)
             return result.fetchall() if fetch else None
 
     # ---------------- Fechamento ---------------- #
     def close(self):
-        """
-        Fecha a conexão com o banco de dados.
-        """
+        """Fecha a conexão com o banco de dados."""
         self.engine.dispose()
-
 
 # ---------------- Forma de Uso ---------------- #
 
