@@ -32,5 +32,6 @@ dev = ["black", "ruff", "pytest"]
 "Homepage" = "https://github.com/KelvynBFreitas/kldb"
 "Bug Tracker" = "https://github.com/KelvynBFreitas/kldb/issues"
 
-[tool.setuptools]
-packages = ["kldb"]
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["kldb*"]
