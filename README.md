@@ -32,27 +32,28 @@ pip install "kldb[oracle]"
 pip install "kldb[all,dev]"
 ```
 
-🚀 Uso Básico
+## 🚀 Uso Básico
 Conexões e Consultas Simples
 Este exemplo mostra como usar as classes específicas para cada banco (kloracle e klpostgres) para carregar dados.
+```bash
 from kldb import kloracle, klpostgres
 
-# Conexão com Oracle usando variáveis do arquivo .env
+ Conexão com Oracle usando variáveis do arquivo .env
 db_oracle = kloracle(env_file=".env")
 
-# Consulta sem parâmetros
+ Consulta sem parâmetros
 df1 = db_oracle.loadOracle("consultas_simples")
 
-# Consulta com parâmetros (substitui :ano dentro do seu SQL)
+ Consulta com parâmetros (substitui :ano dentro do seu SQL)
 df2 = db_oracle.loadOracle("consultas_parametrizada", params={"ano": 2024})
 
-# Conexão com Postgres usando arquivo .env
+ Conexão com Postgres usando arquivo .env
 db_postgres = klpostgres(env_file=".env")
 df3 = db_postgres.loadPostgres("consultas_postgres")
-
-Operações em Lote e Gerenciamento de Banco
+```
+## Operações em Lote e Gerenciamento de Banco
 Para operações transacionais e em lote (como UPSERT e DELETE), recomenda-se usar a classe DatabaseManager como um context manager (with...).
-
+```bash
 from kldb import DatabaseManager
 import pandas as pd
 
@@ -80,3 +81,4 @@ with DatabaseManager() as db:
     
     # 4. Deletar todos os registros de uma tabela (Use com cautela!)
     # db.delete_table("outra_tabela")
+```
