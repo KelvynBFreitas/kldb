@@ -37,25 +37,23 @@ class DatabaseManager:
             echo=echo,
             future=True
         )
-        # ✅ instanciar sem bind (SQLAlchemy 2.0)
         self.metadata = MetaData()
         self.conn: Optional[Connection] = None
+        self._transaction_ctx = None  # guarda o context manager
 
     # ---------------- Context Manager ---------------- #
     def __enter__(self):
-        self.conn = self.engine.begin()
+        self._transaction_ctx = self.engine.begin()
+        self.conn = self._transaction_ctx.__enter__()  # pega a Connection real
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.conn:
-            self.conn.close()
+        if self._transaction_ctx:
+            self._transaction_ctx.__exit__(exc_type, exc_val, exc_tb)
         self.engine.dispose()
 
     # ---------------- Métodos de Tabela ---------------- #
     def get_table_columns(self, table_name: str) -> List[str]:
-        """
-        Retorna a lista de colunas de uma tabela, exceto 'id'.
-        """
         table = Table(table_name, self.metadata, autoload_with=self.engine)
         return [col.name for col in table.columns if col.name.lower() != 'id']
 
@@ -67,9 +65,6 @@ class DatabaseManager:
         unique_fields: List[str],
         batch_size: int = 5000
     ) -> None:
-        """
-        Insere ou atualiza registros em lote usando UPSERT.
-        """
         if not data_list:
             print("Nenhum dado para inserir ou atualizar.")
             return
@@ -92,9 +87,6 @@ class DatabaseManager:
         unique_fields: List[str],
         batch_size: int
     ):
-        """
-        Método interno que faz UPSERT em lotes.
-        """
         for i in range(0, len(data_list), batch_size):
             batch = data_list[i:i + batch_size]
             cleaned_batch = [
@@ -109,9 +101,6 @@ class DatabaseManager:
 
     # ---------------- Delete ---------------- #
     def delete_table(self, table_name: str) -> None:
-        """
-        Exclui todos os registros de uma tabela.
-        """
         table = Table(table_name, self.metadata, autoload_with=self.engine)
         if self.conn is None:
             with self.engine.begin() as conn:
@@ -122,9 +111,6 @@ class DatabaseManager:
             print(f"{deleted.rowcount} registros deletados da tabela '{table_name}'")
 
     def delete_by_keys(self, table_name: str, keys: Dict[str, List[Any]]) -> None:
-        """
-        Deleta registros de uma tabela com base em valores específicos de coluna(s).
-        """
         table = Table(table_name, self.metadata, autoload_with=self.engine)
         conditions = []
 
@@ -150,9 +136,6 @@ class DatabaseManager:
 
     # ---------------- Queries Arbitrárias ---------------- #
     def execute_query(self, query: Union[str, text], fetch: bool = True):
-        """
-        Executa qualquer query SQL e retorna resultados se fetch=True.
-        """
         if self.conn is None:
             with self.engine.begin() as conn:
                 result = conn.execute(text(query) if isinstance(query, str) else query)
@@ -163,8 +146,8 @@ class DatabaseManager:
 
     # ---------------- Fechamento ---------------- #
     def close(self):
-        """Fecha a conexão com o banco de dados."""
         self.engine.dispose()
+
 
 # ---------------- Forma de Uso ---------------- #
 
