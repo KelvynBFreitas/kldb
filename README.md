@@ -37,7 +37,7 @@ dados = [
 ]
 
   Uso com context manager (recomendado)
-    with DatabaseManager() as db:
+#with DatabaseManager() as db:
 
     # Inserir ou atualizar registros em lote (UPSERT)
     db.insert_or_update_batch("usuarios", dados, unique_fields=["email"])
