@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kldb"
-version = "0.1.0"
+version = "0.1.1"
 description = "Conector simplificado para Oracle e Postgres usando SQLAlchemy + Pandas"
 authors = [
     { name = "Kelvyn Freitas", email = "Kelvyn_fr21@hotmail.com" }
