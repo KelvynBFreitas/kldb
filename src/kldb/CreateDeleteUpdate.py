@@ -33,7 +33,7 @@ class DatabaseManager:
         host = host or os.getenv("IPPOSTGRES")
 
         self.engine: Engine = create_engine(
-            f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}",
+            f"postgresql+psycopg://{user}:{password}@{host}:{port}/{dbname}", # <--- AQUI
             echo=echo,
             future=True
         )
