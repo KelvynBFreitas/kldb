@@ -27,6 +27,7 @@ all = [
     "oracledb>=1.0.0",
     "psycopg2-binary>=2.9",
     "psycopg>=3.3.3",
+    "psycopg2>=2.9.12",
     "psycopg-binary>=3.3.3",
 ]
 dev = ["black", "ruff", "pytest"]
